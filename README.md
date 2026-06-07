@@ -8,6 +8,40 @@ This project is based on a real-world Meta Glasses Reviews dataset and is design
 
 It includes a production-style backend architecture with MVC structure, middleware chaining, role-based access control, and RESTful API design.
 
+## Architecture Flow
+
+```
+┌─────────────┐                    ┌─────────────┐                    ┌─────────────┐
+│    USER     │                    │   BACKEND   │                    │  DATABASE   │
+│             │                    │             │                    │             │
+│  1. Register│                    │             │                    │             │
+│     / Login │                    │             │                    │             │
+│ ───────────►│                    │             │                    │             │
+│             │                    │ 2. Save     │                    │             │
+│             │                    │    User     │                    │             │
+│             │ ──────────────────►│ ──────────►│                    │             │
+│             │                    │             │                    │             │
+│  3. Receive │                    │             │                    │             │
+│    JWT Token│◄────────────────── │             │                    │             │
+│ ◄────────── │                    │             │                    │             │
+│             │                    │             │                    │             │
+│  4. Write   │                    │             │                    │             │
+│    Review   │                    │             │                    │             │
+│  (with JWT) │                    │ 5. Save     │                    │             │
+│ ───────────►│                    │    Review   │                    │             │
+│             │                    │ ──────────►│                    │             │
+│             │                    │             │                    │             │
+│  6. View    │                    │             │                    │             │
+│   Dashboard │                    │ 7. Calculate│                    │             │
+│ ───────────►│                    │  Analytics  │                    │             │
+│             │                    │ ──────────►│                    │             │
+│             │                    │             │                    │             │
+│  8. Receive │◄────────────────── │◄────────── │                    │             │
+│   Charts &  │                    │             │                    │             │
+│   Graphs    │                    │             │                    │             │
+└─────────────┘                    └─────────────┘                    └─────────────┘
+```
+
 ## Key Features
 
 - Complete CRUD APIs for review data.
