@@ -10,36 +10,20 @@ It includes a production-style backend architecture with MVC structure, middlewa
 
 ## Architecture Flow
 
-```
-┌─────────────┐                    ┌─────────────┐                    ┌─────────────┐
-│    USER     │                    │   BACKEND   │                    │  DATABASE   │
-│             │                    │             │                    │             │
-│  1. Register│                    │             │                    │             │
-│     / Login │                    │             │                    │             │
-│ ───────────►│                    │             │                    │             │
-│             │                    │ 2. Save     │                    │             │
-│             │                    │    User     │                    │             │
-│             │ ──────────────────►│ ──────────►│                    │             │
-│             │                    │             │                    │             │
-│  3. Receive │                    │             │                    │             │
-│    JWT Token│◄────────────────── │             │                    │             │
-│ ◄────────── │                    │             │                    │             │
-│             │                    │             │                    │             │
-│  4. Write   │                    │             │                    │             │
-│    Review   │                    │             │                    │             │
-│  (with JWT) │                    │ 5. Save     │                    │             │
-│ ───────────►│                    │    Review   │                    │             │
-│             │                    │ ──────────►│                    │             │
-│             │                    │             │                    │             │
-│  6. View    │                    │             │                    │             │
-│   Dashboard │                    │ 7. Calculate│                    │             │
-│ ───────────►│                    │  Analytics  │                    │             │
-│             │                    │ ──────────►│                    │             │
-│             │                    │             │                    │             │
-│  8. Receive │◄────────────────── │◄────────── │                    │             │
-│   Charts &amp;  │                    │             │                    │             │
-│   Graphs    │                    │             │                    │             │
-└─────────────┘                    └─────────────┘                    └─────────────┘
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant B as Backend
+    participant D as Database
+    
+    U->>B: 1. Register/Login
+    B->>D: 2. Save User
+    B-->>U: 3. JWT Token
+    U->>B: 4. Write Review (with JWT)
+    B->>D: 5. Save Review
+    U->>B: 6. View Dashboard
+    B->>D: 7. Calculate Analytics
+    B-->>U: 8. Charts & Graphs
 ```
 
 ## Key Features
