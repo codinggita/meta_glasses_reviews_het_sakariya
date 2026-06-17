@@ -5,6 +5,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const rateLimit = require('express-rate-limit');
+const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
 const app = express();
 
@@ -29,5 +30,13 @@ app.get('/api/v1/health', (req, res) => {
     message: 'API is running!'
   });
 });
+
+// Routes
+app.use('/api/v1/auth', require('./routes/authRoutes'));
+app.use('/api/v1/reviews', require('./routes/reviewRoutes'));
+
+// Error handling middleware
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app;
