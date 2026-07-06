@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
+import Reviews from './pages/Reviews'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/reviews' element={<Reviews />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route
