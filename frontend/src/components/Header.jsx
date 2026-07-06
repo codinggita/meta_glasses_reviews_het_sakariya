@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser, reset } from '../store/authSlice'
 
 const Header = () => {
@@ -20,8 +20,14 @@ const Header = () => {
           Meta Reviews
         </Link>
         <nav className='flex items-center gap-4'>
+          <Link to='/reviews' className='hover:text-gray-300'>
+            Reviews
+          </Link>
           {user ? (
             <>
+              <Link to='/create-review' className='hover:text-gray-300'>
+                Write a Review
+              </Link>
               <Link to='/dashboard' className='hover:text-gray-300'>
                 Dashboard
               </Link>
