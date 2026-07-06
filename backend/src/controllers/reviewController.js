@@ -17,9 +17,10 @@ const getReviews = async (req, res, next) => {
     if (req.query.search) {
       query = query.find({
         $or: [
-          { productName: { $regex: req.query.search, $options: 'i' } },
-          { reviewTitle: { $regex: req.query.search, $options: 'i' } },
-          { reviewText: { $regex: req.query.search, $options: 'i' } }
+          { title: { $regex: req.query.search, $options: 'i' } },
+          { review: { $regex: req.query.search, $options: 'i' } },
+          { name: { $regex: req.query.search, $options: 'i' } },
+          { country: { $regex: req.query.search, $options: 'i' } }
         ]
       });
     }
@@ -122,7 +123,7 @@ const updateReview = async (req, res, next) => {
       throw new Error(`Review not found with id ${req.params.id}`);
     }
 
-    if (review.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (review.author && review.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
       res.status(401);
       throw new Error('Not authorized to update this review');
     }
@@ -153,7 +154,7 @@ const deleteReview = async (req, res, next) => {
       throw new Error(`Review not found with id ${req.params.id}`);
     }
 
-    if (review.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
+    if (review.author && review.author.toString() !== req.user._id.toString() && req.user.role !== 'admin') {
       res.status(401);
       throw new Error('Not authorized to delete this review');
     }
@@ -188,7 +189,7 @@ const getAnalytics = async (req, res, next) => {
       {
         $group: {
           _id: null,
-          avgRating: { $avg: '$rating' }
+          avgRating: { $avg: { $toDouble: '$rating' } }
         }
       }
     ]);

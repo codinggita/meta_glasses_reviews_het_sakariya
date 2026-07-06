@@ -1,40 +1,60 @@
 const mongoose = require('mongoose');
 
 const ReviewSchema = new mongoose.Schema({
-  productName: {
+  reviewID: {
     type: String,
-    required: [true, 'Please add a product name']
+    unique: true
   },
-  reviewTitle: {
+  name: {
     type: String,
-    required: [true, 'Please add a review title']
+    required: [true, 'Please add reviewer name']
   },
-  reviewText: {
+  date: {
+    type: String
+  },
+  verifiedPurchase: {
     type: String,
-    required: [true, 'Please add a review text']
+    default: 'False'
   },
   rating: {
-    type: Number,
-    min: 1,
-    max: 5,
-    required: [true, 'Please add a rating between 1 and 5']
+    type: String,
+    required: [true, 'Please add rating']
+  },
+  helpful: {
+    type: String
+  },
+  title: {
+    type: String,
+    required: [true, 'Please add review title']
+  },
+  review: {
+    type: String,
+    required: [true, 'Please add review text']
+  },
+  profile: {
+    type: String
+  },
+  country: {
+    type: String
+  },
+  reviewLink: {
+    type: String
+  },
+  reviewImage: {
+    type: String
+  },
+  helpful_aug: {
+    type: String
+  },
+  is_positive_review: {
+    type: String
+  },
+  helpfulness_score: {
+    type: String
   },
   author: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  helpfulCount: {
-    type: Number,
-    default: 0
-  },
-  verifiedPurchase: {
-    type: Boolean,
-    default: false
-  },
-  tags: {
-    type: [String],
-    default: []
+    ref: 'User'
   },
   createdAt: {
     type: Date,
@@ -47,6 +67,6 @@ const ReviewSchema = new mongoose.Schema({
 });
 
 ReviewSchema.index({ rating: 1, createdAt: -1 });
-ReviewSchema.index({ productName: 'text', reviewTitle: 'text', reviewText: 'text' });
+ReviewSchema.index({ title: 'text', review: 'text', name: 'text', country: 'text' });
 
 module.exports = mongoose.model('Review', ReviewSchema);
