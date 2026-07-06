@@ -68,8 +68,28 @@ const getMe = async (req, res, next) => {
   }
 };
 
+// @desc    Logout user
+// @route   GET /api/v1/auth/logout
+// @access  Public
+const logout = async (req, res, next) => {
+  try {
+    res.cookie('token', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Logged out',
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
+  logout,
 };
