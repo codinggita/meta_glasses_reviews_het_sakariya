@@ -1,9 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getReviews, createReview } from '../services/reviewService';
+import { getReviews, createReview, getAnalytics } from '../services/reviewService';
 
 const initialState = {
   reviews: [],
   currentReview: null,
+  totalReviews: 0,
+  averageRating: 0,
+  ratingsBreakdown: [],
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -28,6 +31,19 @@ export const addReview = createAsyncThunk(
   async (reviewData, thunkAPI) => {
     try {
       return await createReview(reviewData);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchAnalytics = createAsyncThunk(
+  'reviews/fetchAnalytics',
+  async (_, thunkAPI) => {
+    try {
+      return await getAnalytics();
     } catch (error) {
       const message =
         error.response?.data?.message || error.message || error.toString();
@@ -71,6 +87,21 @@ export const reviewSlice = createSlice({
         state.reviews.push(action.payload.data);
       })
       .addCase(addReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(fetchAnalytics.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchAnalytics.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.totalReviews = action.payload.totalReviews;
+        state.averageRating = action.payload.averageRating;
+        state.ratingsBreakdown = action.payload.ratingsBreakdown;
+      })
+      .addCase(fetchAnalytics.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
