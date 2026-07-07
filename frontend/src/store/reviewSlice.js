@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getReviews, createReview, getAnalytics } from '../services/reviewService';
+import { getReviews, createReview, getAnalytics, deleteReview as deleteReviewService, updateReview as updateReviewService, getReview } from '../services/reviewService';
 
 const initialState = {
   reviews: [],
@@ -44,6 +44,46 @@ export const fetchAnalytics = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       return await getAnalytics();
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchReview = createAsyncThunk(
+  'reviews/fetchReview',
+  async (id, thunkAPI) => {
+    try {
+      return await getReview(id);
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteReview = createAsyncThunk(
+  'reviews/deleteReview',
+  async (id, thunkAPI) => {
+    try {
+      await deleteReviewService(id);
+      return id;
+    } catch (error) {
+      const message =
+        error.response?.data?.message || error.message || error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const updateReview = createAsyncThunk(
+  'reviews/updateReview',
+  async ({ id, reviewData }, thunkAPI) => {
+    try {
+      return await updateReviewService(id, reviewData);
     } catch (error) {
       const message =
         error.response?.data?.message || error.message || error.toString();
@@ -102,6 +142,52 @@ export const reviewSlice = createSlice({
         state.ratingsBreakdown = action.payload.ratingsBreakdown;
       })
       .addCase(fetchAnalytics.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(fetchReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.currentReview = action.payload.data;
+      })
+      .addCase(fetchReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(deleteReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.reviews = state.reviews.filter(
+          (review) => review._id !== action.payload
+        );
+      })
+      .addCase(deleteReview.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateReview.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateReview.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        const index = state.reviews.findIndex(
+          (review) => review._id === action.payload.data._id
+        );
+        if (index !== -1) {
+          state.reviews[index] = action.payload.data;
+        }
+      })
+      .addCase(updateReview.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

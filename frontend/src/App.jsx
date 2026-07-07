@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard'
 import Reviews from './pages/Reviews'
 import CreateReview from './pages/CreateReview'
 import Analytics from './pages/Analytics'
+import MyReviews from './pages/MyReviews'
+import EditReview from './pages/EditReview'
 
 function App() {
   return (
@@ -23,6 +25,22 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateReview />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/my-reviews'
+          element={
+            <ProtectedRoute>
+              <MyReviews />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reviews/:id/edit'
+          element={
+            <ProtectedRoute>
+              <EditReview />
             </ProtectedRoute>
           }
         />
