@@ -10,7 +10,7 @@ const Dashboard = () => {
         <h1 className='text-4xl font-bold mb-6'>
           Welcome, {user?.name}
         </h1>
-        <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
           <Link
             to='/reviews'
             className='bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition text-center'
@@ -24,6 +24,13 @@ const Dashboard = () => {
           >
             <h2 className='text-2xl font-semibold mb-2'>Write a Review</h2>
             <p className='text-gray-600'>Share your experience</p>
+          </Link>
+          <Link
+            to='/my-reviews'
+            className='bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition text-center'
+          >
+            <h2 className='text-2xl font-semibold mb-2'>My Reviews</h2>
+            <p className='text-gray-600'>View your reviews</p>
           </Link>
           <Link
             to='/analytics'
