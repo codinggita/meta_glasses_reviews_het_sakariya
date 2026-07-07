@@ -28,6 +28,9 @@ const Header = () => {
               <Link to='/create-review' className='hover:text-gray-300'>
                 Write a Review
               </Link>
+              <Link to='/analytics' className='hover:text-gray-300'>
+                Analytics
+              </Link>
               <Link to='/dashboard' className='hover:text-gray-300'>
                 Dashboard
               </Link>
